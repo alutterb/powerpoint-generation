@@ -1,0 +1,14 @@
+pytesseract
+pdf2image
+python-dotenv
+pygtrie
+pandas
+numpy
+langchain
+tiktoken
+pinecone-client[grpc]
+tqdm
+pdfplumber
+openai
+FlagEmbedding
+argparse
