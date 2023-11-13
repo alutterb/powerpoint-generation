@@ -5,7 +5,7 @@ and specify additional details for how the powerpoint should be generated.
 
 import tkinter as tk
 from tkinter import filedialog
-from extraction import TextExtractor
+from extraction import Extractor
 
 class PresentationGeneratorApp:
     def __init__(self, root):
@@ -34,9 +34,7 @@ class PresentationGeneratorApp:
 
     def start_processing(self):
         for file in self.uploaded_files:
-            text_extractor = TextExtractor(file)
-            res = text_extractor.extract_text()
-            print(res)
+            res = Extractor(file).extract_data()
             break
 
 
