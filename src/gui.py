@@ -1,10 +1,11 @@
 '''
-This file will use tkinker to create a simple GUI for uploading documents
+Uses tkinker to create a simple GUI for uploading documents
 and specify additional details for how the powerpoint should be generated.
 '''
 
 import tkinter as tk
 from tkinter import filedialog
+from extraction import TextExtractor
 
 class PresentationGeneratorApp:
     def __init__(self, root):
@@ -32,9 +33,12 @@ class PresentationGeneratorApp:
                 print(f"Uploaded: {file_path}")  # Just for confirmation
 
     def start_processing(self):
-        # Placeholder for processing logic
-        print("Starting processing...")
-        # Add code here to start the processing of the uploaded files
+        for file in self.uploaded_files:
+            text_extractor = TextExtractor(file)
+            res = text_extractor.extract_text()
+            print(res)
+            break
+
 
 # Create the main window
 root = tk.Tk()
