@@ -35,6 +35,8 @@ class PresentationGeneratorApp:
     def start_processing(self):
         for file in self.uploaded_files:
             res = Extractor(file).extract_data()
+            print(res['TEXT'][0])
+            print(res['PARAGRAPH'][0])
             break
 
 

@@ -3,9 +3,7 @@ Handles the extraction of raw text and images from the uploaded documents
 Currently will support pdf and docx files
 '''
 import pdfplumber
-from PIL import Image
-import os
-import pickle
+import docx
 import concurrent.futures
 from concurrent.futures import ThreadPoolExecutor
 
@@ -36,8 +34,6 @@ class Extractor:
             except Exception as e:
                 print(f"Error processing page: {e}")
                 return -1, ""
-        if self.file_ext == '.docx':
-            pass
         return False
 
     def extract_from_pdf(self):
@@ -54,6 +50,17 @@ class Extractor:
         print("Information from pdf successfully extracted.")
         return info_dict
 
+    def extract_from_docx(self):
+        try:
+            doc = docx.Document(self.file_path)
+        except Exception as e:
+            print(f"Error opening document: {e}")
+            return []
+        
+        info_dict = {'PARAGRAPH' : [], 'TEXT' : []}
+        for i, para in enumerate(doc.paragraphs):
+            info_dict['PARAGRAPH'].append(i)
+            info_dict['TEXT'].append(para.text)
+        
+        return info_dict
 
-    def extract_text_from_docx(self):
-        pass
