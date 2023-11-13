@@ -1,36 +1,46 @@
 '''
 This file will use tkinker to create a simple GUI for uploading documents
-and specifying additional details for how the powerpoint should be generated.
+and specify additional details for how the powerpoint should be generated.
 '''
 
 import tkinter as tk
 from tkinter import filedialog
 
-def upload_action():
-    # Code to handle file upload
-    pass
+class PresentationGeneratorApp:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Presentation Generator")
 
-def start_processing():
-    # Code to initiate the processing pipeline
-    pass
+        # Initialize the list to store file paths
+        self.uploaded_files = []
 
+        # Create and place the upload button
+        self.upload_btn = tk.Button(self.root, text="Upload Files", command=self.upload_action)
+        self.upload_btn.pack(pady=10)
+
+        # Create and place the start processing button
+        self.start_btn = tk.Button(self.root, text="Start Processing", command=self.start_processing)
+        self.start_btn.pack(pady=10)
+
+
+    def upload_action(self):
+        # Open file dialog and allow user to select files
+        file_paths = filedialog.askopenfilenames()  # Returns a tuple of file paths
+        for file_path in file_paths:
+            if file_path:
+                self.uploaded_files.append(file_path)
+                print(f"Uploaded: {file_path}")  # Just for confirmation
+
+    def start_processing(self):
+        # Placeholder for processing logic
+        print("Starting processing...")
+        # Add code here to start the processing of the uploaded files
+
+# Create the main window
 root = tk.Tk()
-root.title("Presentation Generator")
 
-upload_btn = tk.Button(root, text="Upload File", command=upload_action)
-upload_btn.pack()
+# Create an instance of the Application
+app = PresentationGeneratorApp(root)
 
-# Add inputs for hyperparameters
-# Example: number of slides
-num_slides_label = tk.Label(root, text="Number of Slides:")
-num_slides_label.pack()
-num_slides_entry = tk.Entry(root)
-num_slides_entry.pack()
-
-# More hyperparameter inputs can be added here
-
-# Button to start processing
-start_btn = tk.Button(root, text="Start Processing", command=start_processing)
-start_btn.pack(pady=20)
-
+# Start the main loop
 root.mainloop()
