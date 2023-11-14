@@ -6,25 +6,8 @@ import pdfplumber
 from pytesseract import image_to_string
 import docx
 
-import concurrent.futures
-from concurrent.futures import ThreadPoolExecutor
-
-import logging
-import datetime 
 # each class will be tied to a specific document that the user uploaded in gui.py
 class Extractor:
-    # datetime timestamp for logging
-    current_time = datetime.datetime.now()
-    timestamp = current_time.strftime("%Y-%m-%d_%H-%M-%S")
-
-    # set up logging
-    logger = logging.getLogger("Extractor")
-    logger.setLevel(logging.INFO)
-    file_handler = logging.FileHandler(f'logs/pdf_processing_errors_{timestamp}.log')
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    file_handler.setFormatter(formatter)
-    logger.addHandler(file_handler)
-
     def __init__(self, file_path):
         self.file_path = file_path
         self.file_ext = ''
@@ -42,13 +25,16 @@ class Extractor:
 
     def extract_from_pdf(self):
         info_dict = {'PAGE': [], 'TEXT': []}
-        # get number of pages in pdf
+        # loop through and grab page number and text from each page
         with pdfplumber.open(self.file_path) as pdf:
-            #page_numbers = range(len(pdf.pages))
-            for i, page in enumerate(pdf.pages):
-                info_dict['PAGE'].append(i)
-                info_dict['TEXT'].append(page.extract_text())
-
+            for page in pdf.pages:
+                page_number = page.page_number
+                text = page.extract_text()
+                # if no text layers, use ocr scanner
+                if not text:
+                    text = image_to_string(page.to_image())
+                info_dict['PAGE'].append(page_number)
+                info_dict['TEXT'].append(text)
         print("Information from pdf successfully extracted.")
         return info_dict
 
