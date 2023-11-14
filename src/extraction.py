@@ -40,36 +40,14 @@ class Extractor:
         else:
             raise ValueError("Unsupported file format - only supported formats are pdf or docx")
 
-    def process_page_helper(self, page_number):
-        try:
-            with pdfplumber.open(self.file_path) as pdf:
-                page = pdf.pages[page_number]
-                text = page.extract_text()
-                if not text:
-                    try:
-                        im = page.to_image()
-                        text = image_to_string(im.original)
-                    except Exception as ocr_error:
-                        self.logger.error(f"OCR error on page {page_number}: {ocr_error}")
-                        text = " "
-            return page_number, text
-
-        except Exception as e:
-            self.logger.error(f"Error processing page {page_number}: {e}")
-            return page_number, "Error"
-
     def extract_from_pdf(self):
         info_dict = {'PAGE': [], 'TEXT': []}
+        # get number of pages in pdf
         with pdfplumber.open(self.file_path) as pdf:
-            page_numbers = range(len(pdf.pages))
-
-        with ThreadPoolExecutor() as executor:
-            futures = [executor.submit(self.process_page_helper, page_num) for page_num in page_numbers]
-
-            for future in concurrent.futures.as_completed(futures):
-                page_num, text = future.result()
-                info_dict['PAGE'].append(page_num)
-                info_dict['TEXT'].append(text)
+            #page_numbers = range(len(pdf.pages))
+            for i, page in enumerate(pdf.pages):
+                info_dict['PAGE'].append(i)
+                info_dict['TEXT'].append(page.extract_text())
 
         print("Information from pdf successfully extracted.")
         return info_dict

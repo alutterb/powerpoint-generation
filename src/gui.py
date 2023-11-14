@@ -6,6 +6,7 @@ and specify additional details for how the powerpoint should be generated.
 import tkinter as tk
 from tkinter import filedialog
 from extraction import Extractor
+import time
 
 class PresentationGeneratorApp:
     def __init__(self, root):
@@ -34,7 +35,10 @@ class PresentationGeneratorApp:
 
     def start_processing(self):
         for file in self.uploaded_files:
+            start_time = time.time()
             res = Extractor(file).extract_data()
+            end_time = time.time()
+            print(f"Execution Time (Multiprocessing): {end_time - start_time} seconds")
             break
 
 
